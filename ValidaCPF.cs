@@ -12,27 +12,27 @@ using Newtonsoft.Json;
 
 public static class ValidateCpfFunction
 {
-    [FunctionName("ValidateCpf")]
+    [FunctionName("ValidaCpf")]
     public static IActionResult Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
     {
-        log.LogInformation("Processing CPF validation request.");
+        log.LogInformation("Processando...");
 
         string cpf = req.Query["cpf"];
 
         if (string.IsNullOrEmpty(cpf))
         {
-            return new BadRequestObjectResult("Please provide a CPF in the query string.");
+            return new BadRequestObjectResult("Por favor digitar um CPF");
         }
 
-        bool isValid = ValidateCpf(cpf);
+        bool isValid = ValidaCPF(cpf);
         return new OkObjectResult(new { cpf, isValid });
     }
 
-    private static bool ValidateCpf(string cpf)
+    private static bool ValidaCPF(string cpf)
     {
-        cpf = Regex.Replace(cpf, "[^0-9]", ""); // Remove caracteres não numéricos
+        cpf = Regex.Replace(cpf, "[^0-9]", "");
 
         if (cpf.Length != 11 || cpf.Distinct().Count() == 1)
             return false;
